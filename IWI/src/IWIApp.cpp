@@ -8,25 +8,17 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-struct CustomCircle {
-    vec2 position;
-    float radius;
-    Color color;
-};
-
 class IWIApp : public App {
     public:
+    static void prepareSettings(Settings *settings);
+
     void setup() override;
     void mouseDown(MouseEvent event) override;
     void update() override;
     void draw() override;
 
+    Surface processedImage_;
     gl::Texture2dRef processedImageTex_;
-    vector<CustomCircle> circles_;
-
-    const float radius_ = 1.0f;
-    const Color goodColor_ = Color(0.0f, 0.0f, 1.0f);
-    const Color badColor_ = Color(1.0f, 0.0f, 0.0f);
 };
 
 void invertArea(Surface *surface, Area area) {
@@ -40,35 +32,31 @@ void invertArea(Surface *surface, Area area) {
     }
 }
 
+void IWIApp::prepareSettings( Settings *settings ) {
+	settings->setResizable(false);
+}
+
 void IWIApp::setup() {
-    Surface processedImage(loadImage(loadResource(RES_IMAGE)));
-    invertArea(&processedImage, Area(0, 0, processedImage.getWidth(), processedImage.getHeight()));
-    processedImageTex_ = gl::Texture2d::create(processedImage);
+    processedImage_ = Surface(loadImage(loadResource(RES_IMAGE)));
+    processedImageTex_ = gl::Texture2d::create(processedImage_);
+    setWindowSize(processedImage_.getSize());
 }
 
 void IWIApp::mouseDown(MouseEvent event) {
-    CustomCircle circle;
-    circle.position = event.getPos();
-    circle.radius = radius_;
     if (event.isLeftDown()) {
-        circle.color = goodColor_;
+        invertArea(&processedImage_, Area(event.getX() - 2, event.getY() -2, event.getX() + 2, event.getY() + 2));
     } else if (event.isRightDown()) {
-        circle.color = badColor_;
+        invertArea(&processedImage_, Area(event.getX() - 2, event.getY() -2, event.getX() + 2, event.getY() + 2));
     }
-    circles_.push_back(circle);
 }
 
 void IWIApp::update() {
+    processedImageTex_ = gl::Texture2d::create(processedImage_);
 }
 
 void IWIApp::draw() {
     gl::clear(Color::black());
-    gl::draw(processedImageTex_, getWindowBounds());
-    for (vector<CustomCircle>::iterator it = circles_.begin(); it != circles_.end(); ++it) {
-        gl::color((*it).color);
-        gl::drawSolidCircle((*it).position, (*it).radius);
-    }
-    gl::color(Color::white());
+    gl::draw(processedImageTex_, processedImage_.getBounds());
 }
 
-CINDER_APP(IWIApp, RendererGl)
+CINDER_APP(IWIApp, RendererGl, IWIApp::prepareSettings)
