@@ -18,9 +18,22 @@ class IWIApp : public App {
 	gl::Texture2dRef processedImageTex_;
 };
 
+void invertArea(Surface *surface, Area area)
+{
+	Surface::Iter iter = surface->getIter(area);
+	while (iter.line()) {
+		while (iter.pixel()) {
+			iter.r() = 255 - iter.r();
+			iter.g() = 255 - iter.g();
+			iter.b() = 255 - iter.b();
+		}
+	}
+}
+
 void IWIApp::setup()
 {
 	Surface processedImage(loadImage(loadResource(RES_IMAGE)));
+	invertArea(&processedImage, Area(0, 0, processedImage.getWidth(), processedImage.getHeight()));
 	processedImageTex_ = gl::Texture2d::create(processedImage);
 }
 
