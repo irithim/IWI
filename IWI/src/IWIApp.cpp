@@ -8,6 +8,12 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+struct CustomCircle {
+	vec2 position;
+	float radius;
+	Color color;
+};
+
 class IWIApp : public App {
   public:
 	void setup() override;
@@ -16,6 +22,11 @@ class IWIApp : public App {
 	void draw() override;
 
 	gl::Texture2dRef processedImageTex_;
+	vector<CustomCircle> circles_;
+
+	const float radius_ = 1.0f;
+	const Color goodColor_ = Color(0.0f, 0.0f, 1.0f);
+	const Color badColor_ = Color(1.0f, 0.0f, 0.0f);
 };
 
 void invertArea(Surface *surface, Area area)
@@ -39,6 +50,16 @@ void IWIApp::setup()
 
 void IWIApp::mouseDown( MouseEvent event )
 {
+	CustomCircle circle;
+	circle.position = event.getPos();
+	circle.radius = radius_;
+	if (event.isLeftDown()) {
+		circle.color = goodColor_;
+	}
+	else if (event.isRightDown()) {
+		circle.color = badColor_;
+	}
+	circles_.push_back(circle);
 }
 
 void IWIApp::update()
@@ -47,7 +68,13 @@ void IWIApp::update()
 
 void IWIApp::draw()
 {
+	gl::clear(Color::black());
 	gl::draw(processedImageTex_, getWindowBounds());
+	for (vector<CustomCircle>::iterator it = circles_.begin(); it != circles_.end(); ++it) {
+		gl::color((*it).color);
+		gl::drawSolidCircle((*it).position, (*it).radius);
+	}
+	gl::color(Color::white());
 }
 
 CINDER_APP( IWIApp, RendererGl )
