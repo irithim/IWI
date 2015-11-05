@@ -1,25 +1,4 @@
-#include "cinder/app/App.h"
-#include "cinder/app/RendererGl.h"
-#include "cinder/gl/gl.h"
-#include "cinder/ImageIo.h"
-#include "Resources.h"
-
-using namespace ci;
-using namespace ci::app;
-using namespace std;
-
-class IWIApp : public App {
-    public:
-    static void prepareSettings(Settings *settings);
-
-    void setup() override;
-    void mouseDown(MouseEvent event) override;
-    void update() override;
-    void draw() override;
-
-    Surface processedImage_;
-    gl::Texture2dRef processedImageTex_;
-};
+#include "IWIApp.h"
 
 void invertArea(Surface *surface, Area area) {
     Surface::Iter iter = surface->getIter(area);
@@ -59,4 +38,3 @@ void IWIApp::draw() {
     gl::draw(processedImageTex_, processedImage_.getBounds());
 }
 
-CINDER_APP(IWIApp, RendererGl, IWIApp::prepareSettings)
