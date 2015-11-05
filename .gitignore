@@ -257,3 +257,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+cinder_0.9.0_vc2013
+
