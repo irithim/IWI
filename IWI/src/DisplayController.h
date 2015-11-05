@@ -1,16 +1,14 @@
-#ifndef DISPLAY_WINDOW_H
-#define DISPLAY_WINDOW_H
+#ifndef DISPLAY_CONTROLLER_H
+#define DISPLAY_CONTROLLER_H
 
-#include "cinder/app/App.h"
 #include "cinder/ImageIo.h"
-#include "cinder/app/RendererGl.h"
-#include "cinder/gl/gl.h"
 #include "Resources.h"
+#include "Controller.h"
 
 using namespace ci;
 using namespace ci::app;
 
-class DisplayWindow {
+class DisplayController : Controller {
 
 public:
 	void load();
@@ -21,7 +19,7 @@ public:
 	ivec2 getSize();
 
 private:
-	void DisplayWindow::invertArea(Surface *surface, Area area);
+	void DisplayController::invertArea(Surface *surface, Area area);
 
 	Surface processedImage_;
 	gl::Texture2dRef processedImageTex_;

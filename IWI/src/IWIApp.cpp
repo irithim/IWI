@@ -1,28 +1,34 @@
 #include "IWIApp.h"
-#include "DisplayWindow.h"
+#include "DisplayController.h"
+#include "CameraController.h"
 
 void IWIApp::prepareSettings( Settings *settings ) {
 	settings->setResizable(false);
 }
 
 void IWIApp::setup() {
-	getWindow()->setUserData(new DisplayWindow);
-	getWindow()->getUserData<DisplayWindow>()->load();
-	setWindowSize(getWindow()->getUserData<DisplayWindow>()->getSize());
+	getWindow()->setUserData(new DisplayController);
+	getWindow()->getUserData<DisplayController>()->load();
+	setWindowSize(getWindow()->getUserData<DisplayController>()->getSize());
+
+	app::WindowRef newWindow = createWindow(Window::Format().size(400, 400));
+	newWindow->setUserData(new CameraController);
+	newWindow->getUserData<CameraController>()->load();
+	newWindow->setSize(getWindow()->getUserData<CameraController>()->getSize());
 }
 
 void IWIApp::mouseDown(MouseEvent event) {
-	DisplayWindow *data = getWindow()->getUserData<DisplayWindow>();
-	data->mouseDown(event);
+	Controller *controller = getWindow()->getUserData<Controller>();
+	controller->mouseDown(event);
 }
 
 void IWIApp::update() {
-	DisplayWindow *data = getWindow()->getUserData<DisplayWindow>();
-	data->update();
+	Controller *controller = getWindow()->getUserData<Controller>();
+	controller->update();
 }
 
 void IWIApp::draw() {
-	DisplayWindow *data = getWindow()->getUserData<DisplayWindow>();
-	data->draw();
+	Controller *controller = getWindow()->getUserData<Controller>();
+	controller->draw();
 }
 
