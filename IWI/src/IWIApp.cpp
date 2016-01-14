@@ -1,34 +1,113 @@
-#include "IWIApp.h"
-#include "DisplayController.h"
-#include "CameraController.h"
+#include "cinder/app/App.h"
+#include "cinder/app/RendererGl.h"
+#include "cinder/gl/gl.h"
+#include "cinder/Capture.h"
 
-void IWIApp::prepareSettings( Settings *settings ) {
-	settings->setResizable(false);
+#include "CinderOpenCv.h"
+
+using namespace ci;
+using namespace ci::app;
+using namespace std;
+
+class IWIApp : public App {
+public:
+    void setup();
+
+    void updateFaces(Surface cameraImage);
+    void update();
+
+    void draw();
+
+    CaptureRef			mCapture;
+    gl::TextureRef		mCameraTexture;
+
+    cv::CascadeClassifier	mFaceCascade, mEyeCascade;
+    vector<Rectf>			mFaces, mEyes;
+};
+
+void IWIApp::setup()
+{
+    mFaceCascade.load(getAssetPath("haarcascade_frontalface_alt.xml").string());
+    mEyeCascade.load(getAssetPath("haarcascade_eye.xml").string());
+
+    mCapture = Capture::create(640, 480);
+    mCapture->start();
 }
 
-void IWIApp::setup() {
-	getWindow()->setUserData(new DisplayController);
-	getWindow()->getUserData<DisplayController>()->load();
-	setWindowSize(getWindow()->getUserData<DisplayController>()->getSize());
+void IWIApp::updateFaces(Surface cameraImage)
+{
+    const int calcScale = 2; // calculate the image at half scale
 
-	app::WindowRef newWindow = createWindow(Window::Format().size(400, 400));
-	newWindow->setUserData(new CameraController);
-	newWindow->getUserData<CameraController>()->load();
-	newWindow->setSize(getWindow()->getUserData<CameraController>()->getSize());
+    // create a grayscale copy of the input image
+    cv::Mat grayCameraImage(toOcv(cameraImage, CV_8UC1));
+
+    // scale it to half size, as dictated by the calcScale constant
+    int scaledWidth = cameraImage.getWidth() / calcScale;
+    int scaledHeight = cameraImage.getHeight() / calcScale;
+    cv::Mat smallImg(scaledHeight, scaledWidth, CV_8UC1);
+    cv::resize(grayCameraImage, smallImg, smallImg.size(), 0, 0, cv::INTER_LINEAR);
+
+    // equalize the histogram
+    cv::equalizeHist(smallImg, smallImg);
+
+    // clear out the previously deteced faces & eyes
+    mFaces.clear();
+    mEyes.clear();
+
+    // detect the faces and iterate them, appending them to mFaces
+    vector<cv::Rect> faces;
+    mFaceCascade.detectMultiScale(smallImg, faces);
+    for (vector<cv::Rect>::const_iterator faceIter = faces.begin(); faceIter != faces.end(); ++faceIter) {
+        Rectf faceRect(fromOcv(*faceIter));
+        faceRect *= calcScale;
+        mFaces.push_back(faceRect);
+
+        // detect eyes within this face and iterate them, appending them to mEyes
+        vector<cv::Rect> eyes;
+        mEyeCascade.detectMultiScale(smallImg(*faceIter), eyes);
+        for (vector<cv::Rect>::const_iterator eyeIter = eyes.begin(); eyeIter != eyes.end(); ++eyeIter) {
+            Rectf eyeRect(fromOcv(*eyeIter));
+            eyeRect = eyeRect * calcScale + faceRect.getUpperLeft();
+            mEyes.push_back(eyeRect);
+        }
+    }
 }
 
-void IWIApp::mouseDown(MouseEvent event) {
-	Controller *controller = getWindow()->getUserData<Controller>();
-	controller->mouseDown(event);
+void IWIApp::update()
+{
+    if (mCapture && mCapture->checkNewFrame()) {
+        Surface surface = *mCapture->getSurface();
+        if (!mCameraTexture) {
+            mCameraTexture = gl::Texture::create(surface);
+        }
+        else {
+            mCameraTexture->update(surface);
+        }
+        updateFaces(surface);
+    }
 }
 
-void IWIApp::update() {
-	Controller *controller = getWindow()->getUserData<Controller>();
-	controller->update();
+void IWIApp::draw()
+{
+    if (!mCameraTexture)
+        return;
+
+    gl::setMatricesWindow(getWindowSize());
+    gl::enableAlphaBlending();
+
+    // draw the webcam image
+    gl::color(Color(1, 1, 1));
+    gl::draw(mCameraTexture);
+
+    // draw the faces as transparent yellow rectangles
+    gl::color(ColorA(1, 1, 0, 0.45f));
+    for (vector<Rectf>::const_iterator faceIter = mFaces.begin(); faceIter != mFaces.end(); ++faceIter)
+        gl::drawSolidRect(*faceIter);
+
+    // draw the eyes as transparent blue ellipses
+    gl::color(ColorA(0, 0, 1, 0.35f));
+    for (vector<Rectf>::const_iterator eyeIter = mEyes.begin(); eyeIter != mEyes.end(); ++eyeIter)
+        gl::drawSolidCircle(eyeIter->getCenter(), eyeIter->getWidth() / 2);
 }
 
-void IWIApp::draw() {
-	Controller *controller = getWindow()->getUserData<Controller>();
-	controller->draw();
-}
-
+CINDER_APP( IWIApp, RendererGl )

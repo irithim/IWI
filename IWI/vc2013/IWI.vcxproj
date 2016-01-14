@@ -10,7 +10,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4ADAD3DD-979F-4AAB-9258-1FA9720D6001}</ProjectGuid>
+    <ProjectGuid>{0227FEFC-AC3F-4D9C-9BEA-411A9509DA58}</ProjectGuid>
     <RootNamespace>IWI</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -49,7 +49,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\include"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;"..\..\cinder_master\include";..\..\cinder_master\blocks\Cinder-OpenCV\include;..\..\cinder_master\blocks\Cinder-OpenCV\include\opencv2</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -60,11 +60,11 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"..\..\cinder_master\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder-$(PlatformToolset)_d.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cinder-$(PlatformToolset)_d.lib;OpenGL32.lib;%(AdditionalDependencies);..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_calib3d249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_contrib249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_core249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_features2d249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_flann249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_gpu249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_imgproc249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_legacy249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ml249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_nonfree249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_objdetect249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ocl249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_photo249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_stitching249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_superres249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ts249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_video249d.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_videostab249d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\cinder_master\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -75,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\include;"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\include"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;"..\..\cinder_master\include";..\..\cinder_master\blocks\Cinder-OpenCV\include;..\..\cinder_master\blocks\Cinder-OpenCV\include\opencv2</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -87,11 +87,11 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"..\..\cinder_master\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder-$(PlatformToolset).lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>"..\..\..\..\Downloads\cinder_0.9.0_vc2013\cinder_0.9.0_vc2013\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cinder-$(PlatformToolset).lib;OpenGL32.lib;%(AdditionalDependencies);..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_calib3d249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_contrib249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_core249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_features2d249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_flann249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_gpu249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_imgproc249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_legacy249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ml249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_nonfree249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_objdetect249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ocl249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_photo249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_stitching249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_superres249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_ts249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_video249.lib;..\..\cinder_master\blocks\Cinder-OpenCV\lib\vc2013\x86\opencv_videostab249.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\cinder_master\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
@@ -108,10 +108,11 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
-    <ClCompile Include="..\src\IWIApp.cpp" />
+    <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\..\cinder_master\blocks\Cinder-OpenCV\include\CinderOpenCV.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Resources.h" />
+    <ClCompile Include="..\src\IWIApp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
