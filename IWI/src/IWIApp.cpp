@@ -21,14 +21,14 @@ public:
     CaptureRef			mCapture;
     gl::TextureRef		mCameraTexture;
 
-    cv::CascadeClassifier	mFaceCascade, mEyeCascade;
-    vector<Rectf>			mFaces, mEyes;
+    cv::CascadeClassifier	mFaceCascade, mSmileCascade;
+    vector<Rectf>			mFaces, mSmiles;
 };
 
 void IWIApp::setup()
 {
     mFaceCascade.load(getAssetPath("haarcascade_frontalface_alt.xml").string());
-    mEyeCascade.load(getAssetPath("haarcascade_eye.xml").string());
+    mSmileCascade.load(getAssetPath("haarcascade_smile.xml").string());
 
     mCapture = Capture::create(640, 480);
     mCapture->start();
@@ -50,9 +50,9 @@ void IWIApp::updateFaces(Surface cameraImage)
     // equalize the histogram
     cv::equalizeHist(smallImg, smallImg);
 
-    // clear out the previously deteced faces & eyes
+    // clear out the previously deteced faces & smiles
     mFaces.clear();
-    mEyes.clear();
+    mSmiles.clear();
 
     // detect the faces and iterate them, appending them to mFaces
     vector<cv::Rect> faces;
@@ -63,12 +63,12 @@ void IWIApp::updateFaces(Surface cameraImage)
         mFaces.push_back(faceRect);
 
         // detect eyes within this face and iterate them, appending them to mEyes
-        vector<cv::Rect> eyes;
-        mEyeCascade.detectMultiScale(smallImg(*faceIter), eyes);
-        for (vector<cv::Rect>::const_iterator eyeIter = eyes.begin(); eyeIter != eyes.end(); ++eyeIter) {
-            Rectf eyeRect(fromOcv(*eyeIter));
+        vector<cv::Rect> smiles;
+        mSmileCascade.detectMultiScale(smallImg(*faceIter), smiles);
+        for (vector<cv::Rect>::const_iterator smileIter = smiles.begin(); smileIter != smiles.end(); ++smileIter) {
+            Rectf eyeRect(fromOcv(*smileIter));
             eyeRect = eyeRect * calcScale + faceRect.getUpperLeft();
-            mEyes.push_back(eyeRect);
+            mSmiles.push_back(eyeRect);
         }
     }
 }
@@ -104,10 +104,10 @@ void IWIApp::draw()
     for (vector<Rectf>::const_iterator faceIter = mFaces.begin(); faceIter != mFaces.end(); ++faceIter)
         gl::drawSolidRect(*faceIter);
 
-    // draw the eyes as transparent blue ellipses
+    // draw the smiles as transparent blue ellipses
     gl::color(ColorA(0, 0, 1, 0.35f));
-    for (vector<Rectf>::const_iterator eyeIter = mEyes.begin(); eyeIter != mEyes.end(); ++eyeIter)
-        gl::drawSolidCircle(eyeIter->getCenter(), eyeIter->getWidth() / 2);
+    for (vector<Rectf>::const_iterator smileIter = mSmiles.begin(); smileIter != mSmiles.end(); ++smileIter)
+        gl::drawSolidCircle(smileIter->getCenter(), smileIter->getWidth() / 2);
 }
 
 CINDER_APP( IWIApp, RendererGl )
