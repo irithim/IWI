@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -106,13 +107,19 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup />
   <ItemGroup>
-    <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\..\cinder_master\blocks\Cinder-OpenCV\include\CinderOpenCV.h" />
+    <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\src\CameraController.h" />
+    <ClInclude Include="..\src\Controller.h" />
+    <ClInclude Include="..\src\DisplayController.h" />
+    <ClInclude Include="..\src\IWIApp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\CameraController.cpp" />
+    <ClCompile Include="..\src\DisplayController.cpp" />
     <ClCompile Include="..\src\IWIApp.cpp" />
+    <ClCompile Include="..\src\IWImain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
