@@ -5,6 +5,9 @@ void CameraController::setup()
     mFaceCascade.load(getAssetPath("haarcascade_frontalface_alt.xml").string());
     mSmileCascade.load(getAssetPath("haarcascade_smile.xml").string());
 
+    mSmilingTime = 0;
+    mSmilingTimeThreshold = 10;
+
     mSize.x = 640;
     mSize.y = 480;
     mCapture = Capture::create(mSize.x, mSize.y);
@@ -48,6 +51,25 @@ void CameraController::updateFaces(Surface cameraImage)
             mSmiles.push_back(smileRect);
         }
     }
+
+    if (mSmiles.size() == 0) {
+        resetSmiles();
+    }
+    else {
+        mSmilingTime++;
+        if (mSmilingTime > mSmilingTimeThreshold) {
+            // Prevent overflow
+            mSmilingTime = mSmilingTimeThreshold + 1;
+        }
+    }
+}
+
+bool CameraController::isSmiling() {
+    return mSmilingTime > mSmilingTimeThreshold;
+}
+
+void CameraController::resetSmiles() {
+    mSmilingTime = 0;
 }
 
 void CameraController::update()
@@ -81,13 +103,21 @@ void CameraController::draw()
     for (vector<Rectf>::const_iterator faceIter = mFaces.begin(); faceIter != mFaces.end(); ++faceIter)
         gl::drawSolidRect(*faceIter);
 
-    // draw the smiles as transparent blue ellipses
-    gl::color(ColorA(0, 0, 1, 0.35f));
+    // draw the smiles as transparent blue ellipses or green if smiling is approved
+    if (isSmiling()) {
+        gl::color(ColorA(0, 1, 0, 0.35f));
+    }
+    else {
+        gl::color(ColorA(0, 0, 1, 0.35f));
+    }
     for (vector<Rectf>::const_iterator smileIter = mSmiles.begin(); smileIter != mSmiles.end(); ++smileIter)
         gl::drawSolidCircle(smileIter->getCenter(), smileIter->getWidth() / 2);
 }
 
 void CameraController::mouseDown(MouseEvent event) {
+}
+
+void CameraController::mouseMove(MouseEvent event) {
 }
 
 ivec2 CameraController::getSize() {

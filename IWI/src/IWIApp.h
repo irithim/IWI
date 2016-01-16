@@ -15,8 +15,13 @@ public:
 
     void setup() override;
     void mouseDown(MouseEvent event) override;
+    void mouseMove(MouseEvent event) override;
     void update() override;
     void draw() override;
+
+private:
+    app::WindowRef mDisplayWindow;
+    app::WindowRef mCameraWindow;
 };
 
 #endif

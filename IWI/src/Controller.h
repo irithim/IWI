@@ -8,6 +8,7 @@ class Controller {
 
 public:
 	virtual void mouseDown(ci::app::MouseEvent event) = 0;
+	virtual void mouseMove(ci::app::MouseEvent event) = 0;
 	virtual void update() = 0;
 	virtual void draw() = 0;
 	virtual ci::ivec2 getSize() = 0;

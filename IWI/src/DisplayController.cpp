@@ -6,12 +6,14 @@ void DisplayController::setup() {
 }
 
 void DisplayController::mouseDown(MouseEvent event) {
-	if (event.isLeftDown()) {
-		invertArea(&processedImage_, Area(event.getX() - 2, event.getY() - 2, event.getX() + 2, event.getY() + 2));
-	}
-	else if (event.isRightDown()) {
-		invertArea(&processedImage_, Area(event.getX() - 2, event.getY() - 2, event.getX() + 2, event.getY() + 2));
-	}
+}
+
+void DisplayController::mouseMove(MouseEvent event) {
+    mMousePos = event.getPos();
+}
+
+void DisplayController::updateImage() {
+    invertArea(&processedImage_, Area(mMousePos.x - 2, mMousePos.y - 2, mMousePos.x + 2, mMousePos.y + 2));
 }
 
 void DisplayController::update() {

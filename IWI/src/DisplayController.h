@@ -12,17 +12,20 @@ class DisplayController : Controller {
 
 public:
 	void setup();
-	void mouseDown(MouseEvent event);
+    void mouseDown(MouseEvent event);
+	void mouseMove(MouseEvent event);
 	void update();
 	void draw();
 
 	ivec2 getSize();
+    void updateImage();
 
 private:
 	void DisplayController::invertArea(Surface *surface, Area area);
 
 	Surface processedImage_;
 	gl::Texture2dRef processedImageTex_;
+    ivec2 mMousePos;
 };
 
 #endif

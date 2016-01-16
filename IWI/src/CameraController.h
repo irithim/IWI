@@ -16,18 +16,22 @@ class CameraController : Controller {
 public:
     void setup();
 	void mouseDown(MouseEvent event);
+	void mouseMove(MouseEvent event);
 	void update();
 	void draw();
 	ivec2 getSize();
+    bool isSmiling();
+    void resetSmiles();
 
 private:
     void updateFaces(Surface cameraImage);
-	void printDevices();
 
     CaptureRef			mCapture;
     gl::TextureRef		mCameraTexture;
     cv::CascadeClassifier	mFaceCascade, mSmileCascade;
     vector<Rectf>			mFaces, mSmiles;
+    int mSmilingTime;
+    int mSmilingTimeThreshold;
     ivec2				mSize;
 };
 

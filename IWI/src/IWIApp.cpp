@@ -7,14 +7,15 @@ void IWIApp::prepareSettings(Settings *settings) {
 }
 
 void IWIApp::setup() {
-    getWindow()->setUserData(new DisplayController);
-    getWindow()->getUserData<DisplayController>()->setup();
-    setWindowSize(getWindow()->getUserData<DisplayController>()->getSize());
+    mDisplayWindow = getWindow();
+    mDisplayWindow->setUserData(new DisplayController);
+    mDisplayWindow->getUserData<DisplayController>()->setup();
+    setWindowSize(mDisplayWindow->getUserData<DisplayController>()->getSize());
 
-    app::WindowRef newWindow = createWindow(Window::Format().size(400, 400));
-    newWindow->setUserData(new CameraController);
-    newWindow->getUserData<CameraController>()->setup();
-    newWindow->setSize(getWindow()->getUserData<CameraController>()->getSize());
+    mCameraWindow = createWindow(Window::Format().size(400, 400));
+    mCameraWindow->setUserData(new CameraController);
+    mCameraWindow->getUserData<CameraController>()->setup();
+    mCameraWindow->setSize(getWindow()->getUserData<CameraController>()->getSize());
 }
 
 void IWIApp::mouseDown(MouseEvent event) {
@@ -22,7 +23,20 @@ void IWIApp::mouseDown(MouseEvent event) {
     controller->mouseDown(event);
 }
 
+void IWIApp::mouseMove(MouseEvent event) {
+    Controller *controller = getWindow()->getUserData<Controller>();
+    controller->mouseMove(event);
+}
+
 void IWIApp::update() {
+    DisplayController *display_controller = mDisplayWindow->getUserData<DisplayController>();
+    CameraController *camera_controller = mCameraWindow->getUserData<CameraController>();
+
+    if (camera_controller->isSmiling()) {
+        display_controller->updateImage();
+        camera_controller->resetSmiles();
+    }
+
     Controller *controller = getWindow()->getUserData<Controller>();
     controller->update();
 }
