@@ -37,8 +37,8 @@ void IWIApp::update() {
         camera_controller->resetSmiles();
     }
 
-    Controller *controller = getWindow()->getUserData<Controller>();
-    controller->update();
+    camera_controller->update();
+    display_controller->update();
 }
 
 void IWIApp::draw() {
