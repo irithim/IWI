@@ -4,6 +4,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "Resources.h"
+#include "EyeController.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -22,6 +23,7 @@ public:
 private:
     app::WindowRef mDisplayWindow;
     app::WindowRef mCameraWindow;
+    app::WindowRef mEyeWindow;
 };
 
 #endif

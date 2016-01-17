@@ -23,13 +23,17 @@ public:
     bool isSmiling();
     void resetSmiles();
 
+    Rectf eyeL;
+    Rectf eyeR;
+    Surface surface;
+
 private:
     void updateFaces(Surface cameraImage);
 
     CaptureRef			mCapture;
     gl::TextureRef		mCameraTexture;
-    cv::CascadeClassifier	mFaceCascade, mSmileCascade;
-    vector<Rectf>			mFaces, mSmiles;
+    cv::CascadeClassifier	mFaceCascade, mSmileCascade, mEyeLCascade, mEyeRCascade;
+    vector<Rectf>			mFaces, mSmiles, mEyes;
     int mSmilingTime;
     int mSmilingTimeThreshold;
     ivec2				mSize;
