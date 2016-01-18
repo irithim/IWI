@@ -40,11 +40,6 @@ void IWIApp::update() {
 
     camera_controller->update();
 
-    if (camera_controller->isSmiling()) {
-        display_controller->updateImage();
-        camera_controller->resetSmiles();
-    }
-
     Surface surface(200, 200, false);
     Rectf eyeL = camera_controller->eyeL;
     Area area(eyeL.x1, eyeL.y1, eyeL.x2, eyeL.y2);
@@ -54,11 +49,20 @@ void IWIApp::update() {
     surface.copyFrom(camera_controller->surface, area, vec2(-(eyeR.x1 - (eyeL.x2 - eyeL.x1)), -eyeR.y1));
     eye_controller->setSurface(surface);
 
+    display_controller->setCursor(mCameraWindow->getUserData<CameraController>()->getHeadCursor());
+
+    if (camera_controller->isSmiling()) {
+        //display_controller->updateImage();
+        display_controller->userDrawing(0, 255, 0);
+        camera_controller->resetSmiles();
+    }
+
     eye_controller->update();
     display_controller->update();
 }
 
 void IWIApp::draw() {
     Controller *controller = getWindow()->getUserData<Controller>();
-    controller->draw();
+    gl::color(Color(1, 1, 1));
+    controller->draw();    
 }

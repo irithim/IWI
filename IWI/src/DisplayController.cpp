@@ -23,6 +23,9 @@ void DisplayController::update() {
 void DisplayController::draw() {
 	gl::clear(Color::black());
 	gl::draw(processedImageTex_, processedImage_.getBounds());
+
+    gl::color(ColorA(1, 0, 0, 0.35f));
+    gl::drawSolidRect(Rectf(Area(mCursorPos, vec2(mCursorPos + 5))), mCursorPos, mCursorPos + 30);
 }
 
 void DisplayController::invertArea(Surface *surface, Area area) {
@@ -40,3 +43,17 @@ ivec2 DisplayController::getSize() {
 	return processedImage_.getSize();
 }
 
+void DisplayController::setCursor(vec2 position) {
+    mCursorPos = position;
+}
+
+void DisplayController::userDrawing(int r, int g, int b) {
+    Surface::Iter iter = processedImage_.getIter(Area(mCursorPos, mCursorPos + 30));
+    while (iter.line()) {
+        while (iter.pixel()) {
+            iter.r() = ((int)iter.r() + r) / 2;
+            iter.g() = ((int)iter.g() + g) / 2;
+            iter.b() = ((int)iter.b() + b) / 2;
+        }
+    }
+}

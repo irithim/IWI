@@ -26,6 +26,7 @@ public:
     Rectf eyeL;
     Rectf eyeR;
     Surface surface;
+    vec2 getHeadCursor();
 
 private:
     void updateFaces(Surface cameraImage);

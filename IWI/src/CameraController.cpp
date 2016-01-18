@@ -8,7 +8,7 @@ void CameraController::setup()
     mEyeRCascade.load(getAssetPath("haarcascade_righteye_2splits.xml").string());
 
     mSmilingTime = 0;
-    mSmilingTimeThreshold = 10;
+    mSmilingTimeThreshold = 1;
 
     mSize.x = 640;
     mSize.y = 480;
@@ -150,4 +150,11 @@ void CameraController::mouseMove(MouseEvent event) {
 
 ivec2 CameraController::getSize() {
     return mSize;
+}
+
+vec2 CameraController::getHeadCursor() {
+    if (!mFaces.empty()) {
+        return mFaces[0].getUpperLeft();
+    }
+    return vec2(0, 0);
 }
